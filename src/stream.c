@@ -614,11 +614,10 @@ uvc_error_t uvc_probe_stream_ctrl(
   uvc_query_stream_ctrl( devh, ctrl, 1, UVC_SET_CUR );
   uvc_query_stream_ctrl( devh, ctrl, 1, UVC_GET_CUR );
 
-  if(!_uvc_stream_params_negotiated(&required_ctrl, ctrl)) {
-    UVC_DEBUG("Unable to negotiate streaming format");
-    return UVC_ERROR_INVALID_MODE;
-  }
-
+  //if(!_uvc_stream_params_negotiated(&required_ctrl, ctrl)) {
+  //  UVC_DEBUG("Unable to negotiate streaming format");
+  //  return UVC_ERROR_INVALID_MODE;
+  //}
   return UVC_SUCCESS;
 }
 
@@ -1210,7 +1209,7 @@ uvc_error_t uvc_stream_start(
       transfer = libusb_alloc_transfer(packets_per_transfer);
       strmh->transfers[transfer_id] = transfer;      
       strmh->transfer_bufs[transfer_id] = malloc(total_transfer_size);
-
+    
       libusb_fill_iso_transfer(
         transfer, strmh->devh->usb_devh, format_desc->parent->bEndpointAddress,
         strmh->transfer_bufs[transfer_id],
@@ -1309,7 +1308,7 @@ void *_uvc_user_caller(void *arg) {
       pthread_mutex_unlock(&strmh->cb_mutex);
       break;
     }
-    
+
     last_seq = strmh->hold_seq;
     _uvc_populate_frame(strmh);
     
